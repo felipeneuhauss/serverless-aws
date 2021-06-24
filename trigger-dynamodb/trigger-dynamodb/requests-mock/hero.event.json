@@ -1,0 +1,37 @@
+{
+  "Records": [
+    {
+      "eventID": "ab56ef9bff24188693ee6c42dc3f282f",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1616777311,
+        "Keys": {
+          "name": {
+            "S": "Wonderful Woman"
+          },
+          "id": {
+            "S": "07cd161d-fe4c-4656-a015-40fc92b64130"
+          }
+        },
+        "NewImage": {
+          "createdAt": {
+            "S": "2021-03-26T16:48:31.245Z"
+          },
+          "name": {
+            "S": "Wonderful Woman"
+          },
+          "id": {
+            "S": "07cd161d-fe4c-4656-a015-40fc92b64130"
+          }
+        },
+        "SequenceNumber": "170300000000033976939639",
+        "SizeBytes": 147,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:503662028996:table/Heroes/stream/2021-03-26T16:43:23.277"
+    }
+  ]
+}

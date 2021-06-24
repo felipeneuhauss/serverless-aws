@@ -3,7 +3,7 @@
     "FunctionArn": "arn:aws:lambda:us-east-1:503662028996:function:hello-cli:1",
     "Runtime": "nodejs12.x",
     "Role": "arn:aws:iam::503662028996:role/lambda-example",
-    "Handler": "index.handler",
+    "HeroesInsert": "index.handler",
     "CodeSize": 321,
     "Description": "",
     "Timeout": 3,
