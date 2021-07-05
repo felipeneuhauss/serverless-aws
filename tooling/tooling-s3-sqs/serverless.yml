@@ -1,0 +1,65 @@
+org: felipeneuhauss
+app: tooling-s3-sqs
+service: tooling-s3-sqs
+
+frameworkVersion: '2'
+
+
+provider:
+  name: aws
+  profile: felipeneuhauss
+  runtime: nodejs12.x
+  stage: ${opt:stage, "dev"}
+  lambdaHashingVersion: 20201221
+  environment:
+    BUCKET_NAME: felipeneuhauss-files
+    SQS_QUEUE: file-handler
+
+plugins:
+  - serverless-localstack
+  - serverless-mocha-plugin
+  - serverless-offline
+
+custom:
+  sqsArn:
+    Fn::GetAttr:
+      - SQSQueue
+      - Arn
+
+  localstack:
+    stages:
+      - local
+    # Desabilitar deploy
+    autostart: false
+
+  serverless-offline:
+    useChildProcesses: true
+
+package:
+  individually: true
+  excludeDevDependencies: true
+
+functions:
+  s3listener:
+    handler: src/index.s3listener
+    events:
+      - s3:
+          bucket: ${self:provider.environment.BUCKET_NAME}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .csv
+
+  sqslistener:
+    handler: src/index.sqslistener
+    events:
+      - sqs:
+          batchSize: 1
+          arn: ${self:custom.sqsArn}
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.environment.SQS_QUEUE}
+        VisibilityTimeout: 60
