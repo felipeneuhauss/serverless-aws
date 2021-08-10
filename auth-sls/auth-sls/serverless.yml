@@ -1,0 +1,52 @@
+org: felipeneuhauss
+app: auth-sls
+service: auth-sls
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  environment:
+    JWT_KEY: "6f270fa5-852b-4485-9f74-d1dd28598b2f"
+
+functions:
+  authorizer:
+    handler: src/authorizer.handler
+  login:
+    handler: src/login.handler
+    events:
+      - http:
+          path: login
+          method: post
+          cors: true
+  heroes-public:
+    handler: src/getHeroes.public
+    events:
+      - http:
+          path: public
+          method: get
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - Authorization
+
+  heroes-private:
+    handler: src/getHeroes.private
+    events:
+      - http:
+          path: private
+          method: get
+          authorizer: authorizer
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - Authorization
