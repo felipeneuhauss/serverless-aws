@@ -1,0 +1,20 @@
+[
+  {
+    "username": "felipeneuhauss",
+    "password": "password",
+    "scopes": [
+      "heroes:list"
+    ]
+  },
+  {
+    "username": "rafaelneuhauss",
+    "password": "password",
+    "scopes": [
+      "heroes:create"
+    ]
+  },
+  {
+    "username": "araujoneuhauss",
+    "password": "password"
+  }
+]
