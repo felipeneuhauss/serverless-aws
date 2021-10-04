@@ -11,10 +11,10 @@
 #
 # Happy Coding!
 
-service: trigger-dynamodb
+service: hello-sls
 # app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
+app: hello-sls
+org: felipeneuhauss
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -22,48 +22,34 @@ frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: nodejs12.x
   profile: felipeneuhauss
+  runtime: nodejs12.x
   lambdaHashingVersion: 20201221
 
-# you can overwrite defaults here
+# you can ove rwrite defaults here
 #  stage: dev
-  region: us-east-1
-  iam:
-    role:
-      statements:
-        - Effect: "Allow"
-          Action:
-            - "dynamodb:GetItem"
-            - "dynamodb:UpdateItem"
-            - "dynamodb:PutItem"
-            - "dynamodb:ListStreams"
-            - "dynamodb:DescribeStreams"
-          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}
-  environment:
-    DYNAMODB_TABLE: Heroes
+#  region: us-east-1
 
-resources:
-  Resources:
-    HeroesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: name
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-          - AttributeName: name
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
 # you can add packaging information here
 #package:
 #  include:
@@ -72,25 +58,23 @@ resources:
 #  exclude:
 #    - exclude-me.js
 #    - exclude-me-dir/**
+plugins:
+  - serverless-offline
 
 functions:
-  heroes-insert:
-    handler: handler.heroesInsert
+  hello:
+    handler: handler.hello
     events:
       - http:
-          path: /heroes
-          method: post
-          cors: true
-
-  heroes-trigger:
-    handler: handler.heroesTrigger
-    events:
-      - stream:
-          type: dynamodb
-          arn:
-            Fn::GetAtt:
-              - HeroesTable
-              - StreamArn
+          path: hello
+          method: get
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)

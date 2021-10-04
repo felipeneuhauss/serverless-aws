@@ -4,7 +4,6 @@ const decoratorValidator = (fn, schema, argsType) => {
     const { error, value } = schema.validate(data, { abortEarly: true })
 
     event[argsType] = value
-    console.log('event', event)
 
     if (!error) return fn.apply(this, arguments)
 
